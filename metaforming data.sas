@@ -56,3 +56,39 @@ data examsas.stat_ecran;
 set examsas.stat_ecran;
 rapport_std = std1/std2;
 run;
+
+proc sgplot data=examsas.sommeil;
+scatter x=age y=ecran / group=insomnie;
+run;
+
+proc sort data=examsas.sommeil;
+by insomnie;
+run;
+
+proc boxplot data=examsas.sommeil;
+plot  age*insomnie / boxconnect=mean;
+run;
+
+proc anova data=examsas.sommeil;
+class insomnie;
+model age=insomnie;
+run;
+
+proc ttest data=examsas.sommeil;
+var age ;
+class insomnie ;
+run;
+
+/*on a utilisé 2 méthodes pour comparer les moyennes et donnent bien la meme pvalue 0.0156*/
+
+proc freq data=examsas.sommeil order=freq;
+   tables insomnie / binomial(ac wilson exact) alpha=.05;
+run;
+
+proc freq data = examsas.sommeil;
+tables insomnie*tabac /chisq ;
+run;
+
+/*grosse p value donc independance*/
+
+

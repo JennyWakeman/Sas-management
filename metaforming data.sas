@@ -92,3 +92,11 @@ run;
 /*grosse p value donc independance*/
 
 
+%macro graph(table, var_x, var_y,var_group);
+    proc sgplot data=&table;
+    scatter x=&var_x y=&var_y / group=&var_group;
+    run;
+%mend;
+
+%graph(Table=examsas.sommeil, var_x=age,var_y=ecran,var_group=insomnie);
+%graph(Table=examsas.sommeil, var_x=age,var_y=tabac,var_group=sexe);

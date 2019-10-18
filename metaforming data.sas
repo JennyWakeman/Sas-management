@@ -1,18 +1,28 @@
-libname malib '\\teraetu.univ-lyon1.fr\homeetu\p1813127\My Documents\m2\SAS';
-data malib.sommeil;
-infile '\\teraetu.univ-lyon1.fr\homeetu\p1813127\My Documents\m2\SAS\data_sommeil.csv' firstobs=2  DLM=";";
+libname examsas "\\teraetu.univ-lyon1.fr\homeetu\p1411686\My Documents\TPSAS\Exam";
+
+data examsas.sommeil;
+infile '\\teraetu.univ-lyon1.fr\homeetu\p1411686\My Documents\TPSAS\Exam\data_sommeil.csv' firstobs=2  DLM=";";
 input IDEN$ AGE POIDS TAILLE ALCOOL SEXE INSOMNIE TABAC ECRAN;
 run;
-data _NULL_;
-set malib.sommeil;
-where IDEN contains "id";
-put IDEN;
+
+data examsas.sommeil;
+set examsas.sommeil;
+if IDEN = "ID_042" then taille=194;
 run;
 
-data malib.sommeil;
-set malib.sommeil;
-zouzou=substr(IDEN,1,2);
-zouzou2=substr(IDEN,3,4);
-if zouzou="id" then IDEN="ID" ||  zouzou2;
-drop zouzou zouzou2;
+data examsas.sommeil;
+set examsas.sommeil;
+IMC = poids/(0.01*taille)^2;
+if IMC >= 25 then IMC_INTERPRET = "Surpoids";
+else IMC_INTERPRET = "Normal";
+run;
+
+
+
+data examsas.sommeil;
+set examsas.sommeil;
+pref=substr(IDEN,1,2);
+suf=substr(IDEN,3,4);
+if pref="id" then IDEN2="ID" ||  suf;
+drop pref suf;
 run;
